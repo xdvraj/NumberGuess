@@ -1,0 +1,55 @@
+stages: 
+  - install
+  - compile
+  - build
+  - test
+  - deploy
+
+install-job:
+  stage: install
+  script:
+    - echo "Install of tools started"
+    - sudo apt install openjdk-17-jdk -y
+    - sudo apt install maven -y
+  tags:
+    - self-hosted
+
+compile-job:
+  stage: build
+  script:
+    - echo "Compiling Project"
+    - mvn compile
+  tags:
+    - self-hosted
+
+unit-test-job:
+  stage: test
+  script:
+    - echo "Testing started"
+    - mvn test
+  tags:
+    - self-hosted
+
+lint-test-job:
+  stage: test
+  script:
+    - echo "Linting code... This will take about 10 seconds."
+    - sleep 10
+    - echo "No lint issues found."
+  tags:
+    - self-hosted
+
+package-job:
+  stage: build
+  script:
+    - echo "Packaging started"
+    - mvn package
+  tags:
+    - self-hosted
+
+deploy-job:
+  stage: deploy
+  environment: production
+  script:
+    - echo "Deploying application..."
+    - echo "Application successfully deployed."
